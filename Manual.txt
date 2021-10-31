@@ -1,0 +1,120 @@
+
+
+	  			SuperFILL v1.0
+
+                              fabiog@si.tdnet.it
+
+			       Programming guide
+
+
+Overview:
+SuperFill  is an Activex designed for Visual Basic 6.0. It let to fill polygon with solid colors or user patterns.
+It can replace the Polygon API that with some printers does not work correctly. 
+The control have only a method and 4 properties. SuperFill method perform the polygon fill of a polygon passed how parameter. with the properties can be set the style.
+
+
+Property:
+
+Fillmode 
+""""""""
+(Integer) says to the control if filling will be performed on a form, picturebox or printer objects, or if the scanlines must be returned to an array 
+
+0 - (default)  Ouput to an object specified in the property Dest on SuperFill method
+1 - Load and return an array of points.
+
+also view: Array structure
+
+
+FillColor
+"""""""""
+Fill Color (Long)
+
+FillPattern
+"""""""""""
+(String)  Name of file *.mtp tath identify the pattern. If this property is empty will be used the solid fill
+
+Also view: Pattern structure and scale
+
+
+FillScale
+"""""""""
+(Single) Scale of filling (0 of solid fill)
+
+  
+Method:
+
+  SuperFill Dest, EdgeX, EdgeY, nVertex, RetArray, nProins
+  """""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+Parameter  	Type    Description  
+Dest      	Object  PictureBox, Form, Printer
+EdgeX		Double	X Array of  polygon vertex
+EdgeY		Double	Y Array of  polygon vertex
+nVertex		Integer	Number of vertex of polygon
+RetArray	Double	Array Double returned with the scanlines
+nPoints		Long	Number of points returned (1 line = 4 elements, x1,y1,x2,y2)
+
+
+
+Remarks:
+""""""""
+- The array will be returned only with FillMode=1
+- Both FillMode=1 and =0 require object Dest 
+- RetArray And nPoints MUST BE declared and cannot ever omitted
+
+Dim RetArray() as Double, nPoints as Long
+
+
+
+
+Array Structure:
+""""""""""""""""
+For a filling Off-Line, the control can returned an array of points that contain all scan-lines   
+
+for each line, starting and final coordinate (x1,y1,x2,y2) are stored sequentially into the array monodimensional. So, first 4 elements describe the first line, other 4 second line and so on.
+
+RetArray(1)=   X 1° vertex
+RetArray(2)=   Y 1° vertex
+RetArray(3)=   X 2° vertex
+RetArray(4)=   Y 2° vertex
+
+RetArray(5)=   X 1° vertex
+RetArray(6)=   Y 1° vertex
+RetArray(7)=   X 2° vertex
+RetArray(8)=   Y 2° vertex
+..
+..
+
+
+nPoints will be always multiple of 4
+
+
+
+Pattern Structure and scale:
+""""""""""""""""""""""""""""
+The pattern is a simple file ASCII that contain all coord of filling lines
+This structure show how fill with regular squares.
+
+** squares
+0.0878;0.9962;0.0878;0.0679
+0.0878;0.0679;0.9977;0.0679
+0.9977;0.0679;0.9977;0.9992
+0.8969;0.9992;0.0847;0.9992
+
+First line must have two ** and optional a brief description 
+next lines specify 4 coord. of a graphic line. x1;y1;x2;y2
+
+Each pattern correspond to  an area of dimension 1x1. Setting Fillscale Property to enlarge or reduce the ratio according with polygon.
+  
+for example, for a polygon of extent xmax=100 and ymax=100 will need to set the scale = 30 so that process filling resulting correctly. 
+
+
+
+Tips for programming.
+"""""""""""""""""""""
+Since you can use this control to filling directly your polygon, is strongly reccomended you fill your arrays of lines with the result array of control. Filling directly a polygon means recalculate all data each refresh of your draw. This can produce short performance.
+
+
+Fabio Guerrazzi
+
+
+
